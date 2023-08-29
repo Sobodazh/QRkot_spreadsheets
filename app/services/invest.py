@@ -18,7 +18,7 @@ async def not_fully_invested(
     return objects.scalars().all()
 
 
-async def stop_donation(obj_in: Union[CharityProject, Donation]):
+def stop_donation(obj_in: Union[CharityProject, Donation]):
     obj_in.invested_amount = obj_in.full_amount
     obj_in.fully_invested = True
     obj_in.close_date = datetime.utcnow()
@@ -34,13 +34,13 @@ async def invest_money(
 
     if money_left_project > money_left_donation:
         obj_create.invested_amount += money_left_donation
-        await stop_donation(obj_in)
+        stop_donation(obj_in)
     elif money_left_project == money_left_donation:
-        await stop_donation(obj_create)
-        await stop_donation(obj_in)
+        stop_donation(obj_create)
+        stop_donation(obj_in)
     else:
         obj_in.invested_amount += money_left_project
-        await stop_donation(obj_create)
+        stop_donation(obj_create)
 
     return obj_create, obj_in
 

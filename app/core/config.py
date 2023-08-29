@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 from typing import Optional
 
 from pydantic import BaseSettings, EmailStr
@@ -21,6 +22,14 @@ class Settings(BaseSettings):
     auth_provider_x509_cert_url: Optional[str] = None
     client_x509_cert_url: Optional[str] = None
     email: Optional[str] = None
+    AMOUNT_DAYS_FOR_EXAMPLE: Optional[int] = 1
+    FROM_TIME: Optional[datetime] = datetime.utcnow().isoformat(timespec='minutes')
+    TO_TIME: Optional[datetime] = ((datetime.utcnow() +
+                                    timedelta(days=AMOUNT_DAYS_FOR_EXAMPLE)).isoformat(
+                                        timespec='minutes'))
+    FOR_EXAMPLE: Optional[int] = 1
+    MIN_LENGHT: Optional[int] = 1
+    MAX_LENGHT: Optional[int] = 100
 
     class Config:
         env_file = '.env'
